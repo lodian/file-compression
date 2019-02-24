@@ -1,7 +1,8 @@
 #pragma once
+#include "Huffman.hpp"
 #include <string>
 #include <vector>
-#include "Huffman.hpp"
+
 
 typedef unsigned char UCH;
 struct CharInfo

@@ -1,7 +1,26 @@
 #include "FileCompress.h"
 #include <iostream>
 #include <assert.h>
+#include <Windows.h>
 using namespace std;
+
+//进度条
+void ProcessBar()
+{
+	int i = 0;
+	char bar[102];
+	const char* status = "|/-\\";
+	memset(bar, 0, sizeof(bar));
+	while (i <= 100)
+	{
+		printf("[%-100s] [%c] [%d%%]\r", bar, status[i % 4], i);
+		fflush(stdout);
+		bar[i++] = '#';
+		Sleep(30);
+	}
+	printf("\n");
+}
+
 
 FileCompress::FileCompress()
 {
@@ -83,7 +102,8 @@ void FileCompress::CompressFile(const std::string &strFilePath)
 		ch <<= (8 - bitCount);
 		fputc(ch, fOut);
 	}
-
+	ProcessBar();
+	std::cout << "压缩完成！" << std::endl;
 	delete[] pReadBuff;
 	fclose(fIn);
 	fclose(fOut);
@@ -170,6 +190,8 @@ void FileCompress::UnCompressFile(const std::string &strFilePath)
 			}
 		}
 	}
+	ProcessBar();
+	cout << "解压完成！" << endl;
 	delete[] pReadBuff;
 	fclose(fIn);
 	fclose(fOut);
@@ -208,7 +230,6 @@ void FileCompress::WriteHeaderInfo(FILE* pf, const string& strFileName)
 	string suffix = strFileName.substr(strFileName.rfind('.'));
 
 	//记录有效编码的行数
-
 	//记录有效字符以及其出现的次数
 	string strCharCount;
 	size_t lineCount = 0;
@@ -250,4 +271,3 @@ void FileCompress::GetLine(FILE* pf, string& strContent)
 		strContent += ch;
 	}
 }
-
